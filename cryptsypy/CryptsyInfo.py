@@ -16,5 +16,4 @@ class Info(object):
         self.privApiPath = '/api'
         #this might be put into a config file at some point
         self.currenices = ()
-                          
 

@@ -56,4 +56,3 @@ class Status():
             self.MarketCurrent[tuple(pair.split('/'))] = market[pair]
         return 0
 
-
