@@ -15,5 +15,7 @@ class Info(object):
         self.privDomain = 'https://www.cryptsy.com'
         self.privApiPath = '/api'
         #this might be put into a config file at some point
+        self.pubAddress = self.pubDomain + self.pubApiPath
+        self.privAddress = self.privDomain + self.privApiPath
         self.currenices = ()
 
