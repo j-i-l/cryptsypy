@@ -1,0 +1,8 @@
+#the playgournd is ignored
+playground.*
+
+#ignore the python notebook scripts
+*.ipynb
+
+#ignore the binaries
+*.pyc
