@@ -1,28 +1,38 @@
-# -*- coding: utf-8 -*-
-# <nbformat>3.0</nbformat>
-
-# <codecell>
-
 from pyapi import Request,RequestPrivate
+#this is going to be it
+#from pyapi import AccountStructure
 from CryptsyInfo import Info
 import time
 
 # <codecell>
 
+#pur account into pyapi and inherit the specific platform account
+#from the general class.
 class Account():
-    def __init__(self, Platform = 'crypsty', public_key = '', private_key = '',):
+#class Account(AccountStructure):
+    #it does not make much sense to have the info in a class...
+    def __init__(self, PlatformInfo = Info(), public_key = '', private_key = '',):
         """
             This class is designed to hold all information specific to
                 a user account on cryptsy.com.
             Be carefull the secret (priv_key)
         """
-        self._init_Requests(Platform = Platform)
+        #AccountStructure.__init__(self,
+        #                          PlatfromInfo = PlatformInfo,
+        #                          public_key = public_key,
+        #                          private_key = private_key,
+        #                          )
+        
+        #
+        self._init_Requests(PlatformInfo = PlatformInfo)
         self.marketid = {}
         self.Pairs = {}
         self._init_mid_pairs()
         self.CryptoAdresses = {}
         self.CryptoAdresses['LTC'] = 'LMGgCFsxJBjkPwAW9bn5MnZG4vyTGv1aJr'
+        #
         self.pub_key = public_key
+        #
         self.priv_key = private_key
         #self.Request = private_request(Account = self)
         
@@ -31,10 +41,30 @@ class Account():
         self.MyTransactions = {}
         self.TradeHisory = {}
         self.Depths = {}
+        
+        
+        ##Those have to adapted to the specific platform
+        self.command_account_info = 'getinfo'
+        self.command_market_info = 'getmarkets'
+        self.command_trades_history = ''
+        self.command_open_orders = ''
+        #not used
+        self.command_my_transactions = ''
+        self.command_my_trades = ''
+        self.command_my_orders = 'allmyorders'
+        self.command_new_order = 'createorder'
+        self.command_cancel_order = ''
+        self.command_cancel_all_orders = ''
+        self.parameter_ordertype = 'ordertype'
+        self.parameter_market = 'marketid'
+        self.parameter_quantity = 'quantity'
+        self.parameter_price = 'price'
+        self.parameter_order_id = ''
+        self.parameter_market_id = ''
+        
         return None
-    
-    def _init_Requests(self, Platform):
-        PlatformInfo = Info()
+    #
+    def _init_Requests(self, PlatformInfo):
         self.Request = RequestPrivate(Account = self, Info = PlatformInfo)
         self.pubRequest = Request(Info = PlatformInfo)
         return 0
@@ -49,11 +79,11 @@ class Account():
             self.OpenOrders[pair] = md[p]['buyorders']
         del md
         return 0
-    
+    #
     def update_Info(self,):
         return self.Request.fetch('getinfo')
-    
-    def update_MarketsInfo(self,):
+    #
+    def update_MarketInfo(self,):
         return self.Request.fetch('getmarkets')
     
     def update_MyTransactions(self,):
@@ -112,13 +142,14 @@ class Account():
         return 0
     
     def update_Depths(self, market):
+        #what is this again?
         mid = self.marketid[market]
         pair = self.Pairs[mid]
         depths = self.Request.fetch('depth',params={'marketid':mid})
         ##check format
         #self.Dephts[pair] = ...
         return 0
-    
+    #
     def CreateOrder(self, market, order_type, quantity, price):
         mid = self.marketid[market]
         pair = self.Pairs[mid]
@@ -146,7 +177,7 @@ class Account():
     
     def CancelOrder(self, **orders):
         if 'orderid' in orders:
-            c_o = self.Request.fetch('cancelorder',params={'orderid':orderid})
+            c_o = self.Request.fetch('cancelorder',params={'orderid':orders['orderid']})
             print c_o
             #if successfull:
             #    if orderid in self.MyOpenOrders:

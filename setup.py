@@ -25,7 +25,7 @@ setup(name = 'cryptsypy',
       author_email='simply.mail.to.j.i.l@gmail.com',
       license='MIT',
       packages=['cryptsypy'],
-      install_requires = ['apipy'],
+      install_requires = ['pyapi'],
       dependency_links=[
                         'https://github.com/j-i-l/apipy/archive/master.zip#egg=apipy-0.1',
                        ],	

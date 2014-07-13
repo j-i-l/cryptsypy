@@ -3,7 +3,9 @@
 
 # <codecell>
 
+#
 from pyapi import Request
+#from pyapi import StatusStructure
 from CryptsyInfo import Info
 import time
 
@@ -11,7 +13,8 @@ import time
 
 #to do: The goal is to make the status class not platform specific
 class Status():
-    def __init__(self, Platform = 'cryptsy',):# Api = Request()):
+#class Status(StatusStructure):
+    def __init__(self, PlatformInfo = Info(),):# Api = Request()):
         """
             Arguments:
                 - Platform: either the name of the paltform or 
@@ -19,10 +22,16 @@ class Status():
                     Permitted names for the platform are:
                         ['btc-e','crypsty']
         """
-        self._init_Request(Platform) #defs self.Api
+        #StatusStructure.__init__(self, PlatformInfo = PlatformInfo)
+        #
+        self._init_Request(PlatformInfo) #defs self.Api
+        #
         self.MarketCurrent = {}
+        #
         self.OrdersCurrent = {}
+        #
         self.PricesLast = {}
+        #
         self.Currencies = []
         self.Pairs = []
         self.marketid = {}
@@ -35,9 +44,9 @@ class Status():
         
         
         return None
-    
-    def _init_Request(self, Platform):
-        self.Request = Request(Info = Info())
+    #
+    def _init_Request(self, PlatformInfo):
+        self.Request = Request(Info = PlatformInfo())
         return 0
     
     def update_info(self,):
@@ -56,6 +65,7 @@ class Status():
         return 0
         
     def update_PricesLast(self,):
+    #def update_PricesCurrent(self,):
         for pair in self.Pairs:
             pairMarket = self.MarketCurrent[pair]
             try:
@@ -89,6 +99,9 @@ class Status():
             
         
     def get_marketdata(self, marketid = None):
+    #def update_MarketCurrent(self, marketid = None):
+        #
+        #----
         kwargs = {}
         if not marketid:
             kwargs['method'] = 'marketdatav2'
@@ -100,7 +113,8 @@ class Status():
             #market = self.Api.fetch('singlemarketdata',{'marketid':marketid})[u'markets']
         now = time.time()
         market = self.Request.fetch(**kwargs)[u'markets']
-        #market = self.Api.public_request({'method':'marketdatav2'})[u'markets']
+        #----
+        #now,market = self.get_MarketCurrent(marketID = marketID)
         self.MarketCurrent = {}
         for pair in market:
             t_pair = tuple(pair.split('/'))
@@ -109,6 +123,7 @@ class Status():
         return 0
         
     def get_orderdata(self, marketid = None):
+    #def update_OrdersCurrent(self, marketid = None):
         kwargs = {}
         if not marketid:
             kwargs['method'] = 'orderdata'
